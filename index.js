@@ -137,31 +137,37 @@ function isInputValid(regex, input, labelcolor, message, error) {
     }
 }
 
-// СОЗДАНИЕ ОБЪЕКТА
-function createUserInfo(surname, name, middle_name, email, phone, password1, password2, question, reply) {
-    return {
-        surname: surname.value,
-        name: name.value,
-        middle_name: middle_name.value,
-        email: email.value,
-        phone: phone.value,
-        password1: password1.value,
-        password2: password2.value,
-        question: question.value,
-        reply: reply.value
-    };
-}
+// СОЗДАНИЕ КЛАССА ОБЪЕКТА
+class User {
+    constructor(surname, name, middle_name, email, phone, password1, password2, question, reply) {
+        this.surname = surname.value,
+        this.name = name.value,
+        this.middle_name = middle_name.value,
+        this.email = email.value,
+        this.phone = phone.value,
+        this.password1 = password1.value,
+        this.password2 = password2.value,
+        this.question = question.value,
+        this.reply = reply.value
+}}
 
 // ОТПРАВКА НА СЕРВЕР
 async function sendData() {
-    let user = createUserInfo(inputSurname, inputName, secondName, inputEmail, inputPhone, inputPassword1, inputPassword2, inputQuestion, inputReply);
-    let response = await fetch('https://httpbin.org/post', {
+    try {
+        let user = new User(inputSurname, inputName, secondName, inputEmail, inputPhone, inputPassword1, inputPassword2, inputQuestion, inputReply);
+        let response = await fetch('https://httpbin.org/post', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify(user)
-    });
-    let result = await response.json();
-    console.log(result);
+        });
+        let result = await response.json();
+        console.log(result);
+        }
+    catch(error) {
+        console.log("При отправке данных произошла ошибка! Пожалуйста, повторите снова.");
+        console.log(error.type);
+        console.log(error.message);
+    }
 }
